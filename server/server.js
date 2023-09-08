@@ -26,22 +26,27 @@ app.post('/', async (req, res) => {
         console.log(prompt);
 
         const response = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-3.5-turbo",
             messages: [
                 {
                     "role": "system",
                     "content": "You will be provided with a piece of code, and your task is to explain it in a concise way."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
                 }
             ],
             temperature: 0,
             max_tokens: 1024,
             top_p: 1,
+            frequency_penalty: 0.5,
         });
 
         console.log(response.choices[0].message);
 
         res.status(200).send({
-            bot: response.data.choices[0].text
+            bot: response.choices[0].message.content
         })
     } catch (error) {
         console.log(error);
@@ -50,31 +55,3 @@ app.post('/', async (req, res) => {
 })
 
 app.listen(5000, () => console.log('Server is running on port http://localhost:5000'));
-
-
-// const configuration = new Configuration({
-//     apiKey: process.env.OPENAI_API_KEY,
-// });
-
-// const openai = new OpenAIApi(configuration);
-
-// const response = await openai.chat.completions.create({
-//     model: "gpt-3.5-turbo",
-//     messages: [
-//         {
-//             "role": "system",
-//             "content": "You will be provided with a piece of code, and your task is to explain it in a concise way."
-//         },
-//         {
-//             "role": "user",
-//             "content": `${prompt}`
-//         }
-//     ],
-//     temperature: 0,
-//     max_tokens: 1024,
-//     top_p: 1,
-//     frequency_penalty: 0,
-//     presence_penalty: 0
-// });
-
-//streakin
